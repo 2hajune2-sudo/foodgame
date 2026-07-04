@@ -1,0 +1,836 @@
+import tkinter as tk
+from tkinter import ttk
+import random
+import time
+
+
+recipes = {
+    "김치찌개": ("김치","돼지고기","양파","대파","마늘"),
+    "된장찌개": ("두부","감자","양파","대파","마늘"),
+    "순두부찌개": ("두부","계란","양파","대파","고추"),
+    "부대찌개": ("햄","김치","라면","대파","치즈"),
+    "청국장": ("콩","두부","양파","대파","고추"),
+    "갈비탕": ("소고기","대파","마늘","당근","양파"),
+    "설렁탕": ("소고기","대파","마늘","쌀","양파"),
+    "곰탕": ("소고기","대파","마늘","감자","양파"),
+    "육개장": ("소고기","대파","고추","버섯","양파"),
+    "삼계탕": ("닭고기","마늘","대파","쌀","감자"),
+    "불고기": ("소고기","양파","대파","마늘","버섯"),
+    "소불고기": ("소고기","양파","대파","마늘","당근"),
+    "돼지불고기": ("돼지고기","양파","고추","대파","마늘"),
+    "제육볶음": ("돼지고기","고추","양파","대파","마늘"),
+    "닭갈비": ("닭고기","고구마","양파","고추","대파"),
+    "갈비찜": ("소고기","감자","당근","양파","마늘"),
+    "찜닭": ("닭고기","감자","당근","양파","마늘"),
+    "수육": ("돼지고기","마늘","대파","배추","김치"),
+    "족발": ("돼지고기","마늘","대파","배추","고추"),
+    "보쌈": ("돼지고기","배추","김치","마늘","대파"),
+    "비빔밥": ("쌀","당근","콩","계란","고추"),
+    "돌솥비빔밥": ("쌀","당근","콩","계란","버섯"),
+    "볶음밥": ("쌀","계란","양파","당근","대파"),
+    "김치볶음밥": ("쌀","김치","계란","대파","햄"),
+    "새우볶음밥": ("쌀","새우","계란","양파","대파"),
+    "오므라이스": ("쌀","계란","양파","당근","토마토"),
+    "카레라이스": ("쌀","감자","당근","양파","닭고기"),
+    "짜장밥": ("쌀","돼지고기","양파","감자","당근"),
+    "덮밥": ("쌀","돼지고기","양파","계란","대파"),
+    "규동": ("쌀","소고기","양파","계란","대파"),
+    "김밥": ("쌀","김","계란","당근","햄"),
+    "참치김밥": ("쌀","김","참치","계란","당근"),
+    "치즈김밥": ("쌀","김","치즈","계란","햄"),
+    "떡볶이": ("고추","양파","대파","치즈","계란"),
+    "라볶이": ("라면","고추","양파","대파","치즈"),
+    "순대": ("돼지고기","당근","양파","대파","쌀"),
+    "튀김": ("밀가루","감자","당근","새우","오징어"),
+    "핫도그": ("밀가루","햄","치즈","계란","버터"),
+    "어묵탕": ("오징어","대파","양파","당근","마늘"),
+    "잔치국수": ("밀가루","계란","김","대파","당근"),
+    "칼국수": ("밀가루","감자","양파","대파","버섯"),
+    "수제비": ("밀가루","감자","양파","대파","당근"),
+    "냉면": ("밀가루","오이","계란","김","배추"),
+    "비빔냉면": ("밀가루","오이","계란","고추","김"),
+    "막국수": ("밀가루","오이","김치","고추","계란"),
+    "라면": ("라면","계란","대파","김","고추"),
+    "치즈라면": ("라면","치즈","계란","대파","김"),
+    "해물라면": ("라면","새우","오징어","대파","계란"),
+    "짬뽕": ("오징어","새우","양파","고추","대파"),
+    "짜장면": ("밀가루","돼지고기","양파","감자","당근"),
+    "탕수육": ("돼지고기","밀가루","양파","당근","고추"),
+    "깐풍기": ("닭고기","고추","양파","대파","마늘"),
+    "유린기": ("닭고기","양파","고추","대파","오이"),
+    "마파두부": ("두부","돼지고기","고추","양파","대파"),
+    "양장피": ("새우","오징어","오이","양파","당근"),
+    "파스타": ("밀가루","토마토","치즈","버터","양파"),
+    "토마토파스타": ("밀가루","토마토","양파","치즈","마늘"),
+    "크림파스타": ("밀가루","우유","버터","치즈","양파"),
+    "로제파스타": ("밀가루","토마토","우유","치즈","버터"),
+    "알리오올리오": ("밀가루","마늘","버터","대파","고추"),
+    "피자": ("밀가루","치즈","토마토","햄","양파"),
+    "고르곤졸라피자": ("밀가루","치즈","버터","우유","양파"),
+    "페퍼로니피자": ("밀가루","치즈","햄","토마토","고추"),
+    "불고기피자": ("밀가루","치즈","소고기","양파","토마토"),
+    "치즈피자": ("밀가루","치즈","토마토","버터","우유"),
+    "햄버거": ("밀가루","햄","치즈","양파","토마토"),
+    "치즈버거": ("밀가루","햄","치즈","토마토","양파"),
+    "불고기버거": ("밀가루","소고기","치즈","양파","토마토"),
+    "새우버거": ("밀가루","새우","치즈","양파","토마토"),
+    "치킨버거": ("밀가루","닭고기","치즈","양파","토마토"),
+    "샌드위치": ("밀가루","햄","치즈","토마토","오이"),
+    "토스트": ("밀가루","계란","버터","치즈","햄"),
+    "프렌치토스트": ("밀가루","계란","우유","버터","치즈"),
+    "샐러드": ("오이","토마토","브로콜리","당근","양파"),
+    "시저샐러드": ("브로콜리","토마토","치즈","계란","오이"),
+    "오징어볶음": ("오징어","고추","양파","대파","마늘"),
+    "낙지볶음": ("오징어","고추","양파","대파","당근"),
+    "해물탕": ("새우","오징어","양파","대파","마늘"),
+    "해물찜": ("새우","오징어","고추","양파","대파"),
+    "아구찜": ("오징어","고추","양파","콩","대파"),
+    "전": ("밀가루","계란","양파","대파","당근"),
+    "김치전": ("밀가루","김치","계란","양파","대파"),
+    "파전": ("밀가루","대파","계란","오징어","양파"),
+    "감자전": ("감자","밀가루","계란","양파","대파"),
+    "빈대떡": ("콩","밀가루","김치","양파","대파"),
+    "계란말이": ("계란","당근","대파","햄","치즈"),
+    "계란찜": ("계란","우유","대파","양파","치즈"),
+    "장조림": ("소고기","계란","마늘","대파","양파"),
+    "멸치볶음": ("김","콩","마늘","고추","대파"),
+    "콩나물무침": ("콩","대파","마늘","고추","당근"),
+    "잡채": ("당근","양파","버섯","소고기","대파"),
+    "떡국": ("쌀","계란","대파","김","소고기"),
+    "만둣국": ("밀가루","돼지고기","대파","계란","양파"),
+    "만두": ("밀가루","돼지고기","양파","대파","김치"),
+    "호떡": ("밀가루","버터","우유","계란","치즈")
+}
+
+ingredients = [
+    "소고기", "돼지고기", "닭고기", "새우", "오징어",
+    "감자", "고구마", "당근", "양파", "대파",
+    "마늘", "버섯", "토마토", "오이", "배추",
+    "김치", "치즈", "계란", "우유", "버터",
+    "쌀", "밀가루", "라면", "두부", "고추",
+    "참치", "햄", "브로콜리", "콩", "김"
+]
+
+recipe_lookup = {frozenset(v): k for k, v in recipes.items()}
+
+# ─── 세트 메뉴 정의 (10개) ──────────────────────────────────
+SET_MENUS = {
+    "찌개 세트":  ("김치찌개", "된장찌개", "순두부찌개", "부대찌개", "청국장"),
+    "탕 세트":    ("갈비탕", "설렁탕", "곰탕", "육개장", "삼계탕"),
+    "구이 세트":  ("불고기", "소불고기", "돼지불고기", "제육볶음", "닭갈비"),
+    "찜 세트":    ("갈비찜", "찜닭", "수육", "족발", "보쌈"),
+    "밥 세트":    ("비빔밥", "볶음밥", "김치볶음밥", "카레라이스", "오므라이스"),
+    "면 세트":    ("잔치국수", "칼국수", "냉면", "라면", "짜장면"),
+    "김밥 세트":  ("김밥", "참치김밥", "치즈김밥", "돌솥비빔밥", "새우볶음밥"),
+    "중식 세트":  ("짬뽕", "탕수육", "깐풍기", "마파두부", "유린기"),
+    "양식 세트":  ("파스타", "피자", "햄버거", "샌드위치", "샐러드"),
+    "해물 세트":  ("오징어볶음", "해물탕", "해물찜", "해물라면", "어묵탕"),
+}
+
+EMOJI = {
+    "소고기": "🥩", "돼지고기": "🥓", "닭고기": "🍗", "새우": "🦐", "오징어": "🦑",
+    "감자": "🥔", "고구마": "🍠", "당근": "🥕", "양파": "🧅", "대파": "🌿",
+    "마늘": "🧄", "버섯": "🍄‍",     "토마토": "🍅", "오이": "🥒", "배추": "🥬",
+    "김치": "🥗",    "치즈": "🧀",  "계란": "🥚", "우유": "🧃", "버터": "🧈",
+    "쌀": "🍚", "밀가루": "🌾", "라면": "🍜", "두부": "⬜", "고추": "🌶",
+    "참치": "🐟", "햄": "🍖", "브로콜리": "🥦", "콩": "🧉",   "김": "🍙",
+}
+
+# ─── 색상 팔레트 ────────────────────────────────────────
+BG_TOP       = "#FFD58A"
+BG_BOTTOM    = "#FFF6E5"
+CARD_BG      = "#FFFDF8"
+CARD_SHADOW  = "#E8C07A"
+
+TEXT_DARK    = "#3A2B1A"
+TEXT_MUTED   = "#9C8B72"
+
+PRIMARY      = "#FF7A30"
+PRIMARY_H    = "#FF9252"
+PRIMARY_P    = "#E85F12"
+
+SECONDARY    = "#5B8DEF"
+SECONDARY_H  = "#7AA3F5"
+SECONDARY_P  = "#3E6FD1"
+
+GOLD         = "#FFB400"
+TEAL         = "#2EC4B6"
+TEAL_DARK    = "#1FA89B"
+
+SUCCESS_BG   = "#E3F9EC"
+SUCCESS_BD   = "#3CCB7F"
+SUCCESS_TXT  = "#1F8A4C"
+
+FAIL_BG      = "#FFE7E7"
+FAIL_BD      = "#FF5C5C"
+FAIL_TXT     = "#D6334A"
+
+NEUTRAL_BG   = "#FFF1DC"
+NEUTRAL_BD   = "#FFD9A6"
+
+CHIP_BG      = "#FFF6E9"
+CHIP_H       = "#FFE9C7"
+CHIP_BD      = "#FFD9A6"
+CHIP_DIS     = "#EFEAE0"
+CHIP_DIS_BD  = "#E2DAC8"
+CHIP_DIS_TXT = "#B6AA92"
+
+# ─── 전체 창 크기 ────────────────────────────────────────
+# 하단 쓰레기통 바가 화면/작업표시줄 등에 의해 잘리지 않도록
+# 여유 공간을 충분히 두고 전체 높이를 늘림
+W, H = 1300, 820
+
+# ─── 헬퍼 ───────────────────────────────────────────────
+
+def rrp(x1, y1, x2, y2, r):
+    return [
+        x1+r,y1, x2-r,y1, x2,y1, x2,y1+r,
+        x2,y2-r, x2,y2, x2-r,y2, x1+r,y2,
+        x1,y2, x1,y2-r, x1,y1+r, x1,y1,
+    ]
+
+
+def vgrad(canvas, x1, y1, x2, y2, c1, c2, steps=100):
+    r1,g1,b1 = canvas.winfo_rgb(c1)
+    r2,g2,b2 = canvas.winfo_rgb(c2)
+    h = y2 - y1
+    for i in range(steps):
+        t = i/steps
+        r = int(r1+(r2-r1)*t)>>8
+        g = int(g1+(g2-g1)*t)>>8
+        b = int(b1+(b2-b1)*t)>>8
+        col = f"#{r:02x}{g:02x}{b:02x}"
+        canvas.create_rectangle(x1, y1+h*i/steps, x2, y1+h*(i+1)/steps+1, fill=col, outline=col)
+
+
+def card(canvas, x, y, w, h, r=20, pad=16, bg=CARD_BG, shadow=CARD_SHADOW, sdx=5, sdy=5):
+    canvas.create_polygon(rrp(x+sdx,y+sdy,x+w+sdx,y+h+sdy,r), smooth=True, fill=shadow, outline="")
+    canvas.create_polygon(rrp(x,y,x+w,y+h,r), smooth=True, fill=bg, outline="")
+    f = tk.Frame(canvas, bg=bg)
+    canvas.create_window(x+pad, y+pad, anchor="nw", window=f, width=w-2*pad, height=h-2*pad)
+    return f
+
+
+# ─── 커스텀 위젯 ─────────────────────────────────────────
+
+class RBtn(tk.Canvas):
+    def __init__(self, parent, text, cmd=None, w=120, h=40, r=14,
+                 bg=CARD_BG, fc=PRIMARY, hc=PRIMARY_H, pc=PRIMARY_P,
+                 tc="#FFF", font=("맑은 고딕",10,"bold"),
+                 dc="#D9D2C5", dtc="#A89C89"):
+        super().__init__(parent, width=w, height=h, bg=bg, highlightthickness=0)
+        self._cmd=cmd; self.w=w; self.h=h; self.fc=fc; self.hc=hc; self.pc=pc
+        self.dc=dc; self.tc=tc; self.dtc=dtc; self.on=True
+        self._sh = self.create_polygon(rrp(2,2,w-2,h-2,r), smooth=True, fill=fc, outline="")
+        self._tx = self.create_text(w/2,h/2, text=text, fill=tc, font=font, justify="center")
+        self.bind("<Enter>",  lambda e: self.on and (self.itemconfig(self._sh,fill=self.hc), self.config(cursor="hand2")))
+        self.bind("<Leave>",  lambda e: self.on and self.itemconfig(self._sh,fill=self.fc))
+        self.bind("<ButtonPress-1>",   lambda e: self.on and self.itemconfig(self._sh,fill=self.pc))
+        self.bind("<ButtonRelease-1>", self._rel)
+    def _rel(self, e):
+        if not self.on: return
+        self.itemconfig(self._sh, fill=self.hc)
+        if 0<=e.x<=self.w and 0<=e.y<=self.h and self._cmd: self._cmd()
+    def enable(self, v):
+        self.on=v
+        self.itemconfig(self._sh, fill=self.fc if v else self.dc)
+        self.itemconfig(self._tx, fill=self.tc if v else self.dtc)
+    def set_text(self, t): self.itemconfig(self._tx, text=t)
+
+
+class Chip(tk.Canvas):
+    def __init__(self, parent, name, emoji, cmd, bg=CARD_BG, w=82, h=60):
+        super().__init__(parent, width=w, height=h, bg=bg, highlightthickness=0)
+        self._cmd=cmd; self.on=True; self.w=w; self.h=h
+        self._sh = self.create_polygon(rrp(2,2,w-2,h-2,16), smooth=True, fill=CHIP_BG, outline=CHIP_BD, width=1)
+        self._em = self.create_text(w/2, h/2-10, text=emoji, font=("맑은 고딕",17))
+        self._nm = self.create_text(w/2, h/2+14, text=name, font=("맑은 고딕",8,"bold"), fill=TEXT_DARK)
+        self.bind("<Enter>",    lambda e: self.on and (self.itemconfig(self._sh,fill=CHIP_H), self.config(cursor="hand2")))
+        self.bind("<Leave>",    lambda e: self.on and self.itemconfig(self._sh,fill=CHIP_BG))
+        self.bind("<Button-1>", lambda e: self.on and self._cmd and self._cmd())
+    def enable(self, v):
+        self.on=v
+        self.itemconfig(self._sh, fill=CHIP_BG if v else CHIP_DIS, outline=CHIP_BD if v else CHIP_DIS_BD)
+        self.itemconfig(self._nm, fill=TEXT_DARK if v else CHIP_DIS_TXT)
+        self.config(cursor="hand2" if v else "arrow")
+
+
+class Slots(tk.Canvas):
+    def __init__(self, parent, bg=CARD_BG, n=5, sz=32, gap=8):
+        tw = n*sz+(n-1)*gap+16
+        super().__init__(parent, width=tw, height=sz+16, bg=bg, highlightthickness=0)
+        self.n=n; self._c=[]; self._t=[]
+        for i in range(n):
+            x1=8+i*(sz+gap); y1=8; x2=x1+sz; y2=y1+sz
+            c=self.create_oval(x1,y1,x2,y2, outline=CHIP_BD, width=2, fill=CHIP_BG, dash=(3,2))
+            t=self.create_text((x1+x2)/2,(y1+y2)/2, text="", font=("맑은 고딕",16))
+            self._c.append(c); self._t.append(t)
+    def update(self, sel, em):
+        for i in range(self.n):
+            if i<len(sel):
+                self.itemconfig(self._c[i], fill=CHIP_H, outline=GOLD, dash=())
+                self.itemconfig(self._t[i], text=em.get(sel[i],"🍽"))
+            else:
+                self.itemconfig(self._c[i], fill=CHIP_BG, outline=CHIP_BD, dash=(3,2))
+                self.itemconfig(self._t[i], text="")
+
+
+class Pot(tk.Canvas):
+    def __init__(self, parent, bg=CARD_BG, size=120):
+        super().__init__(parent, width=size, height=size, bg=bg, highlightthickness=0)
+        s=size
+        self._sh = self.create_polygon(rrp(4,4,s-4,s-4,26), smooth=True, fill=NEUTRAL_BG, outline=NEUTRAL_BD, width=2)
+        self._ic = self.create_text(s/2, s/2-16, text="🍲", font=("맑은 고딕",36))
+        self._lb = self.create_text(s/2, s/2+30, text="", font=("맑은 고딕",10,"bold"),
+                                     fill=TEXT_DARK, width=s-20, justify="center")
+    def default(self):
+        self.itemconfig(self._sh, fill=NEUTRAL_BG, outline=NEUTRAL_BD)
+        self.itemconfig(self._ic, text="🍲")
+        self.itemconfig(self._lb, text="", fill=TEXT_DARK)
+    def success(self, dish):
+        self.itemconfig(self._sh, fill=SUCCESS_BG, outline=SUCCESS_BD)
+        self.itemconfig(self._ic, text="🍲")
+        self.itemconfig(self._lb, text=dish, fill=SUCCESS_TXT)
+    def fail(self):
+        self.itemconfig(self._sh, fill=FAIL_BG, outline=FAIL_BD)
+        self.itemconfig(self._ic, text="💨")
+        self.itemconfig(self._lb, text="괴식...", fill=FAIL_TXT)
+
+
+class Badge(tk.Canvas):
+    def __init__(self, parent, bg, icon, val, fc, w=130, h=40, tc="#FFF"):
+        super().__init__(parent, width=w, height=h, bg=bg, highlightthickness=0)
+        self.create_polygon(rrp(2,2,w-2,h-2,h/2), smooth=True, fill=fc, outline="")
+        self.create_text(24, h/2, text=icon, font=("맑은 고딕",16))
+        self._v = self.create_text(w/2+10, h/2, text=val, font=("맑은 고딕",12,"bold"), fill=tc)
+    def set(self, t): self.itemconfig(self._v, text=t)
+
+
+class PBar(tk.Canvas):
+    def __init__(self, parent, bg, w=220, h=14, fc=TEAL, tc="#F1E6D2"):
+        super().__init__(parent, width=w, height=h, bg=bg, highlightthickness=0)
+        self.w=w; self.h=h; self.fc=fc; self._bar=None
+        self.create_polygon(rrp(0,0,w,h,h/2), smooth=True, fill=tc, outline="")
+        self.set(0)
+    def set(self, ratio):
+        ratio=max(0,min(1,ratio))
+        if self._bar: self.delete(self._bar); self._bar=None
+        bw=self.w*ratio
+        if bw>self.h:
+            self._bar=self.create_polygon(rrp(0,0,bw,self.h,self.h/2), smooth=True, fill=self.fc, outline="")
+        elif bw>0:
+            self._bar=self.create_oval(0,0,self.h,self.h, fill=self.fc, outline="")
+
+
+# ─── 게임 상태 ───────────────────────────────────────────
+selected   = []
+money      = 75
+discovered = set()
+hint_count = 0
+set_rewards = set()   # 이미 보상을 받은 세트 이름
+COST       = 1
+REWARD     = 55
+TOTAL      = len(recipes)
+
+# ─── 루트 ───────────────────────────────────────────────
+root = tk.Tk()
+root.title("🍳 요리 타이쿤")
+# 캔버스 전체 높이(H=760)와 동일하게 맞춰서 하단 쓰레기통 바가
+# 창 밖으로 잘려 보이지 않던 문제를 수정
+root.geometry(f"{W}x{H}")
+root.resizable(False, False)
+
+cv = tk.Canvas(root, width=W, height=H, highlightthickness=0)
+cv.pack(fill="both", expand=True)
+vgrad(cv, 0, 0, W, H, BG_TOP, BG_BOTTOM)
+
+# ─────────────────────────────────────────────────────────
+# 상단 바  (x=20, y=16, w=1260, h=72)
+# ─────────────────────────────────────────────────────────
+top = card(cv, 20, 16, 1260, 72, r=20, pad=12)
+
+tk.Label(top, text="🍳 요리 타이쿤", font=("맑은 고딕",20,"bold"),
+         bg=CARD_BG, fg=TEXT_DARK).pack(side="left")
+
+bf = tk.Frame(top, bg=CARD_BG)
+bf.pack(side="right")
+recipe_badge = Badge(bf, CARD_BG, "📖", f"0/{TOTAL}", TEAL, w=140, h=42)
+recipe_badge.pack(side="left", padx=(0,12))
+
+# 세트 메뉴 버튼
+sm_btn = RBtn(bf, "🍱 세트 메뉴", w=140, h=42, r=16,
+              bg=CARD_BG, fc="#E07B2A", hc="#F09040", pc="#C06010",
+              font=("맑은 고딕",11,"bold"))
+sm_btn.pack(side="left", padx=(0,12))
+
+# 미니게임 버튼 - '돈' 뱃지와 동일한 y좌표(같은 줄)에, 다른 뱃지와 겹치지 않게 배치
+mg_btn = RBtn(bf, "🎮 미니게임 (-1원)", w=170, h=42, r=16,
+              bg=CARD_BG, fc=SECONDARY, hc=SECONDARY_H, pc=SECONDARY_P,
+              font=("맑은 고딕",11,"bold"))
+mg_btn.pack(side="left", padx=(0,12))
+
+money_badge  = Badge(bf, CARD_BG, "💰", f"{money}원", GOLD, w=130, h=42)
+money_badge.pack(side="left", padx=(0,12))
+
+# 쓰레기통 버튼 - money_badge와 동일한 y, 크기 42×42 정사각형
+trash_btn = RBtn(bf, "🗑", w=42, h=42, r=12,
+                 bg=CARD_BG, fc="#C9A876", hc="#D9BA8C", pc="#B5905F",
+                 font=("맑은 고딕",18))
+trash_btn.pack(side="left", padx=(0,6))
+
+trash_msg = tk.Label(bf, text="", font=("맑은 고딕",9,"bold"),
+                     bg=CARD_BG, fg=TEXT_DARK)
+trash_msg.pack(side="left")
+
+# ─────────────────────────────────────────────────────────
+# 메인 카드 배치
+#   왼쪽  재료    x=20,   w=600, h=590, y=106
+#   중앙  조리대  x=636,  w=300, h=590
+#   오른쪽 도감   x=952,  w=328, h=590
+# ─────────────────────────────────────────────────────────
+CARD_Y = 106
+CARD_H = 590
+
+left_f   = card(cv, 20,  CARD_Y, 600, CARD_H, r=22, pad=18)
+center_f = card(cv, 636, CARD_Y, 300, CARD_H, r=22, pad=18)
+right_f  = card(cv, 952, CARD_Y, 328, CARD_H, r=22, pad=18)
+
+# ── 왼쪽 : 힌트 표시(좌측 상단) + 재료 선택 ────────────────
+hint_frame = tk.Frame(left_f, bg=CARD_BG)
+hint_frame.pack(anchor="w", pady=(0,8))
+hint_lbl = tk.Label(hint_frame, text="💡 힌트 0개 보유", font=("맑은 고딕",10,"bold"),
+                     bg=CARD_BG, fg=TEXT_DARK)
+hint_lbl.pack(side="left", padx=(0,10))
+hint_btn = RBtn(hint_frame, "힌트 사용", w=92, h=30, r=12,
+                bg=CARD_BG, fc=GOLD, hc="#FFC433", pc="#E0A000",
+                font=("맑은 고딕",9,"bold"))
+hint_btn.pack(side="left")
+
+tk.Label(left_f, text="🥕  재료 선택", font=("맑은 고딕",14,"bold"),
+         bg=CARD_BG, fg=TEXT_DARK).pack(anchor="w", pady=(0,10))
+
+grid_f = tk.Frame(left_f, bg=CARD_BG)
+grid_f.pack()
+
+# ── 가운데 : 조리대 ──────────────────────────────────────
+tk.Label(center_f, text="🍳  조리대", font=("맑은 고딕",14,"bold"),
+         bg=CARD_BG, fg=TEXT_DARK).pack(pady=(0,6))
+tk.Label(center_f, text="선택한 재료", font=("맑은 고딕",9),
+         bg=CARD_BG, fg=TEXT_MUTED).pack()
+
+slots = Slots(center_f, CARD_BG, n=5, sz=34, gap=8)
+slots.pack(pady=(4,10))
+
+pot = Pot(center_f, CARD_BG, size=130)
+pot.pack(pady=(0,10))
+
+status_lbl = tk.Label(center_f, text="재료 5개를 골라보세요!",
+    font=("맑은 고딕",10), bg=NEUTRAL_BG, fg=TEXT_DARK,
+    wraplength=240, justify="center", padx=10, pady=8)
+status_lbl.pack(fill="x", pady=(0,12))
+
+btn_f = tk.Frame(center_f, bg=CARD_BG)
+btn_f.pack()
+
+cook_btn = RBtn(btn_f, "🍳  요리하기", w=240, h=44, r=16,
+                bg=CARD_BG, fc=PRIMARY, hc=PRIMARY_H, pc=PRIMARY_P,
+                font=("맑은 고딕",12,"bold"))
+cook_btn.pack(pady=(0,8))
+
+reset_btn = RBtn(btn_f, "🔄  선택 초기화", w=240, h=38, r=14,
+                 bg=CARD_BG, fc=SECONDARY, hc=SECONDARY_H, pc=SECONDARY_P,
+                 font=("맑은 고딕",11,"bold"))
+reset_btn.pack()
+
+# ── 오른쪽 : 도감 + 기록 ─────────────────────────────────
+tk.Label(right_f, text="📖  레시피 도감", font=("맑은 고딕",14,"bold"),
+         bg=CARD_BG, fg=TEXT_DARK).pack(anchor="w")
+
+pr = tk.Frame(right_f, bg=CARD_BG)
+pr.pack(fill="x", pady=(6,10))
+pbar = PBar(pr, CARD_BG, w=220, h=14, fc=TEAL, tc="#F1E6D2")
+pbar.pack(side="left")
+ptxt = tk.Label(pr, text=f"0/{TOTAL}", font=("맑은 고딕",9,"bold"),
+                bg=CARD_BG, fg=TEAL_DARK)
+ptxt.pack(side="left", padx=(8,0))
+
+hf = tk.Frame(right_f, bg=CARD_BG)
+hf.pack(fill="both", expand=True)
+hsb = ttk.Scrollbar(hf, orient="vertical")
+hsb.pack(side="right", fill="y")
+hist = tk.Text(hf, width=20, yscrollcommand=hsb.set,
+               font=("맑은 고딕",10), bg=CARD_BG, fg=TEXT_DARK,
+               bd=0, highlightthickness=0, wrap="word")
+hist.pack(side="left", fill="both", expand=True)
+hsb.config(command=hist.yview)
+hist.tag_config("new",  foreground=SUCCESS_TXT, font=("맑은 고딕",10,"bold"))
+hist.tag_config("dup",  foreground=TEXT_MUTED)
+hist.tag_config("fail", foreground=FAIL_TXT)
+
+# 하단 바 제거 - 쓰레기통 버튼이 상단 바로 이동됨
+
+# ─────────────────────────────────────────────────────────
+# 재료 칩 생성  6열 × 5행
+# ─────────────────────────────────────────────────────────
+chips = {}
+for i, item in enumerate(ingredients):
+    row, col = divmod(i, 6)
+    ch = Chip(grid_f, item, EMOJI.get(item,"🍽"),
+              cmd=lambda x=item: add_ingredient(x),
+              bg=CARD_BG, w=82, h=60)
+    ch.grid(row=row, column=col, padx=4, pady=4)
+    chips[item] = ch
+
+# ─────────────────────────────────────────────────────────
+# 미니게임 오버레이 (메인 화면 위를 덮는 프레임)
+# ─────────────────────────────────────────────────────────
+mg_overlay = tk.Frame(root, bg=BG_BOTTOM)
+
+# ─────────────────────────────────────────────────────────
+# 세트 메뉴 오버레이
+# ─────────────────────────────────────────────────────────
+sm_overlay = tk.Frame(root, bg=BG_BOTTOM)
+
+# ─────────────────────────────────────────────────────────
+# 함수
+# ─────────────────────────────────────────────────────────
+
+def anim_val(setter, s, e, steps=12, delay=16, sfx=""):
+    diff = e - s
+    def step(i):
+        setter(f"{int(round(s+diff*i/steps))}{sfx}")
+        if i < steps: root.after(delay, lambda: step(i+1))
+    step(0)
+
+def upd_money(old, new): anim_val(money_badge.set, old, new, sfx="원")
+def upd_progress():
+    n = len(discovered)
+    pbar.set(n/TOTAL if TOTAL else 0)
+    ptxt.config(text=f"{n}/{TOTAL}")
+    recipe_badge.set(f"{n}/{TOTAL}")
+
+def upd_chips():
+    full = len(selected) >= 5
+    for ch in chips.values(): ch.enable(not full)
+
+def upd_slots(): slots.update(selected, EMOJI)
+
+def set_status(txt, bg=NEUTRAL_BG): status_lbl.config(text=txt, bg=bg)
+
+def update_hint_label():
+    hint_lbl.config(text=f"💡 힌트 {hint_count}개 보유")
+
+def add_ingredient(item):
+    if len(selected) >= 5: return
+    selected.append(item)
+    upd_slots(); upd_chips()
+
+def reset_selection():
+    selected.clear(); upd_slots(); upd_chips()
+    pot.default(); set_status("재료 5개를 골라보세요!")
+
+def best_hint():
+    best_d, best_n, best_i = None, -1, []
+    ss = set(selected)
+    for dish, recipe in recipes.items():
+        if dish in discovered: continue
+        common = ss & set(recipe)
+        if len(common) > best_n:
+            best_n, best_d, best_i = len(common), dish, list(common)
+    return best_d, best_n, best_i
+
+def cook():
+    global money
+    if len(selected) != 5:
+        set_status("재료를 정확히 5개 선택하세요!", FAIL_BG); return
+    cost = len(selected) * COST
+    if money < cost:
+        set_status(f"돈이 부족합니다!\n{cost}원 필요", FAIL_BG); return
+
+    old = money; money -= cost
+    key = frozenset(selected)
+
+    if key in recipe_lookup:
+        dish = recipe_lookup[key]
+        pot.success(dish)
+        if dish in discovered:
+            set_status(f"{dish} 완성!\n(이미 발견, 보상 없음)", SUCCESS_BG)
+            hist.insert(tk.END, f"✔ {dish} (중복, -{cost}원)\n", "dup")
+        else:
+            discovered.add(dish); money += REWARD
+            set_status(f"🎉 신규 레시피 발견!\n{dish}\n(+{REWARD}원, -{cost}원)", SUCCESS_BG)
+            hist.insert(tk.END, f"⭐ {dish} 발견! (+{REWARD}원, -{cost}원)\n", "new")
+            upd_progress()
+            refresh_setmenu_if_open()
+    else:
+        hd, hn, hi = best_hint()
+        pot.fail()
+        if hd is None: set_status(f"실패! (-{cost}원)\n모든 레시피를 발견했어요!", FAIL_BG)
+        else:          set_status(f"실패! (-{cost}원)\n힌트: {hd} ({hn}/5)\n{', '.join(hi)}", FAIL_BG)
+        hist.insert(tk.END, f"✖ 괴식 (-{cost}원)\n", "fail")
+
+    hist.see(tk.END)
+    upd_money(old, money)
+    selected.clear(); upd_slots(); upd_chips()
+
+def search_trash():
+    global money
+    old = money; roll = random.random()
+    if   roll < 0.01: money += 5; trash_msg.config(text="🎉 5원을 주웠습니다!", fg=SUCCESS_TXT)
+    elif roll < 0.06: money += 1; trash_msg.config(text="동전 1원을 주웠습니다!", fg=TEAL_DARK)
+    else:                          trash_msg.config(text="아무것도 없네요...", fg=TEXT_MUTED)
+    upd_money(old, money)
+
+def use_hint():
+    global hint_count
+    if hint_count <= 0:
+        set_status("힌트가 없습니다!\n미니게임으로 힌트를 모아보세요.", FAIL_BG)
+        return
+    hd, hn, hi = best_hint()
+    if hd is None:
+        set_status("모든 레시피를 이미 발견했어요!", SUCCESS_BG)
+        return
+    missing = [x for x in recipes[hd] if x not in selected]
+    hint_count -= 1
+    update_hint_label()
+    if not missing:
+        set_status(f"'{hd}'의 재료를 이미 모두 골랐어요!\n요리하기를 눌러보세요.", SUCCESS_BG)
+    else:
+        reveal = random.choice(missing)
+        set_status(f"💡 힌트!\n가장 가까운 레시피에는\n'{reveal}' 재료가 필요해요!", NEUTRAL_BG)
+
+# ── 미니게임 ─────────────────────────────────────────────
+
+def start_minigame():
+    global money
+    if money < 1:
+        set_status("돈이 부족해서 미니게임을 할 수 없어요!", FAIL_BG)
+        return
+    old = money
+    money -= 1
+    upd_money(old, money)
+    set_status("🎮 미니게임 입장! (-1원)", NEUTRAL_BG)
+    open_minigame()
+
+def open_minigame():
+    for w in mg_overlay.winfo_children():
+        w.destroy()
+    mg_overlay.place(x=0, y=0, width=W, height=H)
+
+    mc = tk.Canvas(mg_overlay, width=W, height=H, highlightthickness=0, bg=BG_BOTTOM)
+    mc.pack(fill="both", expand=True)
+    vgrad(mc, 0, 0, W, H, BG_TOP, BG_BOTTOM)
+
+    cx, cy = W/2, H/2
+    pan_r = 140
+
+    # 음식 결정: 계란후라이 80%, 스테이크 20%
+    food = "스테이크" if random.random() < 0.2 else "계란후라이"
+    food_emoji = "🥩" if food == "스테이크" else "🍳"
+
+    mc.create_text(cx, cy-pan_r-110, text="순발력 게임  (입장료 -1원)", font=("맑은 고딕",22,"bold"), fill=TEXT_DARK)
+    mc.create_text(cx, cy-pan_r-78, text="'클릭!!!' 글자가 나오면 최대한 빠르게 클릭하세요!",
+                    font=("맑은 고딕",11), fill=TEXT_MUTED)
+
+    # 프라이팬
+    mc.create_oval(cx-pan_r, cy-pan_r, cx+pan_r, cy+pan_r, fill="#3A3A3A", outline="#1F1F1F", width=6)
+    mc.create_oval(cx-pan_r+14, cy-pan_r+14, cx+pan_r-14, cy+pan_r-14, fill="#5A5A5A", outline="")
+    mc.create_rectangle(cx+pan_r-12, cy-14, cx+pan_r+170, cy+14, fill="#3A3A3A", outline="")
+    mc.create_text(cx, cy, text=food_emoji, font=("맑은 고딕",78))
+
+    count_id = mc.create_text(cx, cy-pan_r-30, text="3", font=("맑은 고딕",40,"bold"), fill=PRIMARY)
+    result_id = mc.create_text(cx, cy+pan_r+55, text="", font=("맑은 고딕",26,"bold"), fill=TEXT_DARK)
+
+    state = {"clicked": False, "show_time": None}
+
+    def resolve(elapsed):
+        if state["clicked"]:
+            return
+        state["clicked"] = True
+        mc.unbind("<Button-1>")
+        if elapsed is None or elapsed > 0.5:
+            result = "실패"
+        elif elapsed <= 0.3:
+            result = "대성공"
+        else:
+            result = "성공"
+        apply_minigame_result(result, food)
+        mc.itemconfig(result_id, text=f"{result}!",
+                       fill=(SUCCESS_TXT if result != "실패" else FAIL_TXT))
+        root.after(1100, close_minigame)
+
+    def on_click(event=None):
+        if state["clicked"]:
+            return
+        if state["show_time"] is None:
+            resolve(None)   # 너무 일찍 클릭 -> 실패
+        else:
+            resolve(time.time() - state["show_time"])
+
+    def show_click_prompt():
+        if state["clicked"]:
+            return
+        mc.itemconfig(count_id, text="")
+        size = int(pan_r * 2 * 1.15)
+        mc.create_text(cx, cy, text="클릭!!!", font=("맑은 고딕", max(20, size//5), "bold"),
+                        fill="#FF2D2D")
+        state["show_time"] = time.time()
+        # 일정 시간 안에 클릭하지 않으면 자동 실패 처리
+        root.after(900, lambda: resolve(999))
+
+    def countdown(n):
+        if state["clicked"]:
+            return
+        if n <= 0:
+            mc.itemconfig(count_id, text="")
+            delay_ms = int(random.uniform(2, 5) * 1000)
+            root.after(delay_ms, show_click_prompt)
+            return
+        mc.itemconfig(count_id, text=str(n))
+        root.after(1000, lambda: countdown(n-1))
+
+    mc.bind("<Button-1>", on_click)
+    countdown(3)
+
+def apply_minigame_result(result, food):
+    global hint_count
+    if result == "실패":
+        return
+    gain = 1 if result == "성공" else 2
+    if food == "스테이크":
+        gain *= 2
+    hint_count += gain
+    update_hint_label()
+
+def close_minigame():
+    mg_overlay.place_forget()
+
+# ── 세트 메뉴 ─────────────────────────────────────────────
+
+def open_setmenu():
+    for w in sm_overlay.winfo_children():
+        w.destroy()
+    sm_overlay.place(x=0, y=0, width=W, height=H)
+    _build_setmenu_ui()
+
+def _build_setmenu_ui():
+    sm_cv = tk.Canvas(sm_overlay, width=W, height=H, highlightthickness=0, bg=BG_BOTTOM)
+    sm_cv.pack(fill="both", expand=True)
+    vgrad(sm_cv, 0, 0, W, H, BG_TOP, BG_BOTTOM)
+
+    # 제목
+    sm_cv.create_text(W/2, 38, text="🍱 세트 메뉴",
+                       font=("맑은 고딕", 22, "bold"), fill=TEXT_DARK)
+    sm_cv.create_text(W/2, 62, text="세트를 완성하면 힌트 5개 + 100원을 받을 수 있어요!",
+                       font=("맑은 고딕", 10), fill=TEXT_MUTED)
+
+    # ← 돌아가기 버튼
+    back_f = card(sm_cv, 20, 14, 120, 46, r=14, pad=7)
+    back_btn = RBtn(back_f, "← 돌아가기", w=106, h=32, r=12,
+                    bg=CARD_BG, fc=SECONDARY, hc=SECONDARY_H, pc=SECONDARY_P,
+                    font=("맑은 고딕", 9, "bold"))
+    back_btn._cmd = close_setmenu
+    back_btn.pack()
+
+    # 카드 레이아웃 : 2열 × 5행
+    COLS    = 2
+    CW      = 612   # 카드 너비
+    CH      = 116   # 카드 높이
+    X_OFF   = [18, 656]
+    Y_START = 78
+    Y_GAP   = 126   # 행 간격
+
+    for idx, (set_name, dishes) in enumerate(SET_MENUS.items()):
+        col = idx % COLS
+        row = idx // COLS
+        cx  = X_OFF[col]
+        cy  = Y_START + row * Y_GAP
+
+        found    = [d for d in dishes if d in discovered]
+        n_found  = len(found)
+        complete = n_found == len(dishes)
+        claimed  = set_name in set_rewards
+
+        if claimed:
+            bg_c = SUCCESS_BG
+        elif complete:
+            bg_c = "#FFF8DC"   # 완성 미수령 - 연한 노란색
+        else:
+            bg_c = CARD_BG
+
+        f = card(sm_cv, cx, cy, CW, CH, r=18, pad=12, bg=bg_c)
+
+        # 첫 줄: 세트 이름 + 진행도
+        row1 = tk.Frame(f, bg=bg_c)
+        row1.pack(fill="x")
+        tk.Label(row1, text=set_name, font=("맑은 고딕", 12, "bold"),
+                 bg=bg_c, fg=TEXT_DARK).pack(side="left")
+        prog_fg = SUCCESS_TXT if complete else (PRIMARY if n_found > 0 else TEXT_MUTED)
+        tk.Label(row1, text=f"{n_found} / {len(dishes)}",
+                 font=("맑은 고딕", 10, "bold"), bg=bg_c, fg=prog_fg).pack(side="right")
+
+        # 두 번째 줄: 요리 슬롯들
+        row2 = tk.Frame(f, bg=bg_c)
+        row2.pack(fill="x", pady=(6, 0))
+
+        for dish in dishes:
+            if dish in discovered:
+                s_bg = SUCCESS_BG; s_fg = SUCCESS_TXT; s_txt = dish
+            else:
+                s_bg = CHIP_DIS;   s_fg = CHIP_DIS_TXT; s_txt = "?"
+            slot = tk.Frame(row2, bg=s_bg, highlightbackground=CHIP_BD,
+                            highlightthickness=1)
+            slot.pack(side="left", padx=2)
+            tk.Label(slot, text=s_txt, font=("맑은 고딕", 9),
+                     bg=s_bg, fg=s_fg, padx=5, pady=3).pack()
+
+        # 보상 버튼 또는 완료 표시
+        if complete and not claimed:
+            def _claim(sn=set_name):
+                claim_set_reward(sn)
+                open_setmenu()   # 화면 갱신
+            rw_btn = RBtn(row2, "🎁 보상받기", w=108, h=28, r=12,
+                          bg=bg_c, fc=PRIMARY, hc=PRIMARY_H, pc=PRIMARY_P,
+                          font=("맑은 고딕", 9, "bold"))
+            rw_btn._cmd = _claim
+            rw_btn.pack(side="right", padx=(6, 0))
+        elif claimed:
+            tk.Label(row2, text="✅ 완료", font=("맑은 고딕", 10, "bold"),
+                     bg=bg_c, fg=SUCCESS_TXT).pack(side="right", padx=(6, 0))
+
+def close_setmenu():
+    sm_overlay.place_forget()
+
+def claim_set_reward(set_name):
+    global money, hint_count
+    if set_name in set_rewards:
+        return
+    set_rewards.add(set_name)
+    old = money
+    money  += 100
+    hint_count += 5
+    upd_money(old, money)
+    update_hint_label()
+    hist.insert(tk.END, f"🍱 {set_name} 완성! (+100원, +힌트5)\n", "new")
+    hist.see(tk.END)
+
+def refresh_setmenu_if_open():
+    try:
+        if sm_overlay.winfo_ismapped():
+            open_setmenu()
+    except Exception:
+        pass
+
+# 버튼 커맨드 연결
+cook_btn._cmd  = cook
+reset_btn._cmd = reset_selection
+trash_btn._cmd = search_trash
+mg_btn._cmd    = start_minigame
+hint_btn._cmd  = use_hint
+sm_btn._cmd    = open_setmenu
+
+# ─── 초기 상태 ───────────────────────────────────────────
+upd_progress(); upd_slots(); upd_chips(); pot.default(); update_hint_label()
+hist.insert(tk.END, "🍳 요리를 시작해보세요!\n", "dup")
+
+root.mainloop()
