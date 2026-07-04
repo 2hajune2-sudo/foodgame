@@ -349,7 +349,17 @@ mg_btn = RBtn(bf, "🎮 미니게임 (-1원)", w=170, h=42, r=16,
 mg_btn.pack(side="left", padx=(0,12))
 
 money_badge  = Badge(bf, CARD_BG, "💰", f"{money}원", GOLD, w=130, h=42)
-money_badge.pack(side="left")
+money_badge.pack(side="left", padx=(0,12))
+
+# 쓰레기통 버튼 - money_badge와 동일한 y, 크기 42×42 정사각형
+trash_btn = RBtn(bf, "🗑", w=42, h=42, r=12,
+                 bg=CARD_BG, fc="#C9A876", hc="#D9BA8C", pc="#B5905F",
+                 font=("맑은 고딕",18))
+trash_btn.pack(side="left", padx=(0,6))
+
+trash_msg = tk.Label(bf, text="", font=("맑은 고딕",9,"bold"),
+                     bg=CARD_BG, fg=TEXT_DARK)
+trash_msg.pack(side="left")
 
 # ─────────────────────────────────────────────────────────
 # 메인 카드 배치
@@ -436,24 +446,7 @@ hist.tag_config("new",  foreground=SUCCESS_TXT, font=("맑은 고딕",10,"bold")
 hist.tag_config("dup",  foreground=TEXT_MUTED)
 hist.tag_config("fail", foreground=FAIL_TXT)
 
-# ─────────────────────────────────────────────────────────
-# 하단 바  (x=20, y=712, w=1260, h=38) - 쓰레기통 버튼
-# ─────────────────────────────────────────────────────────
-bot = card(cv, 20, 712, 1260, 38, r=16, pad=6)
-tr  = tk.Frame(bot, bg=CARD_BG)
-tr.pack(expand=True)
-
-trash_btn = RBtn(tr, "🗑", w=46, h=26, r=13,
-                 bg=CARD_BG, fc="#C9A876", hc="#D9BA8C", pc="#B5905F",
-                 font=("맑은 고딕",14))
-trash_btn.pack(side="left", padx=(0,10))
-
-tk.Label(tr, text="쓰레기통 뒤지기  (5원 1% · 1원 5%)",
-         font=("맑은 고딕",9), bg=CARD_BG, fg=TEXT_MUTED).pack(side="left")
-
-trash_msg = tk.Label(tr, text="", font=("맑은 고딕",9,"bold"),
-                     bg=CARD_BG, fg=TEXT_DARK)
-trash_msg.pack(side="left", padx=(14,0))
+# 하단 바 제거 - 쓰레기통 버튼이 상단 바로 이동됨
 
 # ─────────────────────────────────────────────────────────
 # 재료 칩 생성  6열 × 5행
